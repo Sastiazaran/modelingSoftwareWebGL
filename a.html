@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <style>html { font-size: 14px; font-family: Arial, Helvetica, sans-serif; }</style>
+  <title> figureModelator </title>
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.common-material.min.css" />
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.material.min.css" />
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.material.mobile.min.css" />
+  <link rel="stylesheet" href="https://demos.telerik.com/kendo-ui/content/shared/styles/examples-offline.css">
+</head>
+
+<body onload="main()">
+  <table>
+    <tr>
+      <td>
+        <canvas id="webgl" width="500" height="500">
+          Please use a browser that supports canvas
+        </canvas>
+      </td>
+      <td style="width: 60%;">
+        <table>
+          <tr>
+            <td>
+              <ul id="fieldlist2">
+                <li>
+                  <input type="radio" name="axis" id="x-axis" class="k-radio" checked="checked" onclick="changeAxis()">
+                  <label class="k-radio-label" for="x-axis">X-axis</label>
+                </li>
+                <li>
+                  <input type="radio" name="axis" id="y-axis" class="k-radio" onclick="changeAxis()">
+                  <label class="k-radio-label" for="y-axis">Y-axis</label>
+                </li>
+                <li>
+                  <input type="radio" name="axis" id="z-axis" class="k-radio" onclick="changeAxis()">
+                  <label class="k-radio-label" for="z-axis">Z-axis</label>
+                </li>
+              </ul>
+            </td>
+            
+          </tr>
+        </table>
+        <ul id="fieldlist">
+          <li>
+            <label>Rotation</label>
+            <input style="width: 80%;" id="slider"/>
+          </li>
+          <li>
+            <label>Rotation Range</label>
+            <div style="width: 80%;" id="rangeslider">
+              <input />
+              <input />
+            </div>
+          </li>
+          <li>
+            <label>Scaling</label>
+            <input style = "width: 80%;" id = "scalingslider"></input>
+          </li>
+          <label>Translation</label>
+          <li>
+            <label>X</label>
+            <input style = "width: 80%;" id = "Xslider"></input>
+          </li>
+          <li>
+            <label>Y</label>
+            <input style = "width: 80%;" id = "Yslider"></input>
+          </li>
+          <li>
+            <label>Z</label>
+            <input style = "width: 80%;" id = "Zslider"></input>
+          </li>
+
+          <li>
+            <label>Red</label>
+            <input style = "width: 80%;" id = "Rslider"></input>
+          </li>
+          <li>
+            <label>Green</label>
+            <input style = "width: 80%;" id = "Gslider"></input>
+          </li>
+          <li>
+            <label>Blue</label>
+            <input style = "width: 80%;" id = "Bslider"></input>
+          </li>
+          <li>
+            <button type = "button" id = "back" onclick = "lastFigure()">last figure</button>
+            <button type = "button" id = "forward" onclick = "nextFigure()">next figure</button>
+            <button type = "button" id = "delete" onclick = "deleteFigures()">delete figures</button>
+            <button id="restart" class="k-primary" onclick="restart()">Restart</button>
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="width: 100%;">
+        <div class="box">
+          <h4>Console log</h4>
+          <div class="console"></div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <style>
+    #fieldlist {
+      margin: 0 0 -2em;
+      padding: 0;
+      text-align: center;
+    }
+
+    #fieldlist > li {
+      list-style: none;
+      padding-bottom: 2em;
+    }
+
+    #fieldlist label {
+      display: block;
+      padding-bottom: 1em;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: #444;
+    }
+
+    #fieldlist2 {
+      margin: 0 5em 2em;
+      padding: 0;
+    }
+
+    #fieldlist2 li {
+      list-style: none;
+      padding-bottom: 1em;
+    }
+  </style>
+
+  <script src="https://kendo.cdn.telerik.com/2021.2.616/js/jquery.min.js"></script>
+  <script src="https://kendo.cdn.telerik.com/2021.2.616/js/kendo.all.min.js"></script>
+  <script src="https://demos.telerik.com/kendo-ui/content/shared/js/console.js"></script>
+  <script src="lib/webgl-utils.js"> </script>
+  <script src="lib/webgl-debug.js"> </script>
+  <script src="lib/cuon-utils.js"> </script>
+  <script src="lib/cuon-matrix.js"> </script>
+  <script src="Example_20220908_01.js"> </script>
+</body>
+</html>
