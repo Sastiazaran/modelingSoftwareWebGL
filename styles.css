@@ -24,7 +24,7 @@
 html,
 body {
   margin: 0;
-  min-height: 100%;
+  height: 100%;
   background:
     radial-gradient(1200px 600px at 10% -10%, rgba(61, 214, 198, 0.08), transparent 55%),
     radial-gradient(900px 500px at 110% 0%, rgba(240, 162, 2, 0.08), transparent 50%),
@@ -33,14 +33,12 @@ body {
   font-family: var(--font);
 }
 
-body {
-  min-height: 100vh;
-}
-
 .app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
   padding: 18px;
   gap: 16px;
 }
@@ -107,16 +105,19 @@ body {
 }
 
 .workspace {
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-rows: minmax(0, 1fr);
   gap: 16px;
-  min-height: 0;
+  overflow: hidden;
 }
 
 .viewport {
   position: relative;
-  min-height: 560px;
+  min-height: 0;
+  height: 100%;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--line);
@@ -125,10 +126,13 @@ body {
 }
 
 #webgl {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   cursor: crosshair;
+  touch-action: none;
 }
 
 .hud {
@@ -143,6 +147,7 @@ body {
   color: var(--muted);
   font-size: 0.78rem;
   line-height: 1.45;
+  pointer-events: none;
 }
 
 .hud p {
@@ -166,6 +171,7 @@ kbd {
   right: 16px;
   display: flex;
   gap: 8px;
+  pointer-events: none;
 }
 
 .ax {
@@ -187,13 +193,14 @@ kbd {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: calc(100vh - 120px);
+  min-height: 0;
+  height: 100%;
   overflow: auto;
   padding-right: 4px;
 }
 
 .panel {
-  padding: 14px;
+  padding: 12px;
   background: var(--bg-elev);
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -241,8 +248,8 @@ kbd {
 .control {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: 4px;
+  margin-bottom: 8px;
   font-size: 0.85rem;
 }
 
@@ -418,12 +425,12 @@ input[type="color"] {
 }
 
 .log-panel .log {
-  max-height: 160px;
+  max-height: 110px;
   overflow: auto;
   font-family: var(--mono);
   font-size: 0.72rem;
   line-height: 1.55;
-  color: var(--muted);
+  color: #c9d4e0;
 }
 
 .log div {
@@ -432,15 +439,31 @@ input[type="color"] {
 }
 
 @media (max-width: 980px) {
+  html,
+  body,
+  .app {
+    height: auto;
+    max-height: none;
+    overflow: auto;
+  }
+
   .workspace {
     grid-template-columns: 1fr;
+    overflow: visible;
   }
 
   .viewport {
+    position: relative;
     min-height: 420px;
+    height: 420px;
+  }
+
+  #webgl {
+    position: absolute;
   }
 
   .dock {
     max-height: none;
+    height: auto;
   }
 }

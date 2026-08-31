@@ -55,6 +55,7 @@
     camera: { yaw: 0.55, pitch: 0.38, distance: 2.6 },
     orbiting: false,
     lastPointer: null,
+    ignoreMouse: false,
     defaultFill: [59 / 255, 184 / 255, 224 / 255]
   };
 
@@ -431,7 +432,17 @@
     return state.vertexDepth;
   }
 
+  var lastAddAt = 0;
+  var lastAddStamp = '';
+
   function addVertex(ev) {
+    var now = Date.now();
+    var stamp = ev.clientX.toFixed(1) + ',' + ev.clientY.toFixed(1);
+    if (stamp === lastAddStamp && now - lastAddAt < 250) {
+      return;
+    }
+    lastAddAt = now;
+    lastAddStamp = stamp;
     var depth = depthForEvent(ev);
     var world = unprojectToDepthPlane(ev.clientX, ev.clientY, depth);
     var figure = ensureCurrentFigure();
@@ -446,10 +457,13 @@
   }
 
   function onPointerDown(ev) {
+    if (ev.button === 2) {
+      return;
+    }
     if (ev.altKey || ev.button === 1) {
       state.orbiting = true;
       state.lastPointer = { x: ev.clientX, y: ev.clientY };
-      if (canvas.setPointerCapture) {
+      if (ev.pointerId != null && canvas.setPointerCapture) {
         canvas.setPointerCapture(ev.pointerId);
       }
       ev.preventDefault();
@@ -648,7 +662,11 @@
 
   function main() {
     canvas = $('webgl');
-    gl = getWebGLContext(canvas);
+    gl = canvas.getContext('webgl', { antialias: true, depth: true }) ||
+         canvas.getContext('experimental-webgl', { antialias: true, depth: true });
+    if (!gl) {
+      gl = getWebGLContext(canvas);
+    }
     if (!gl) {
       log('WebGL is not available in this browser');
       return;
@@ -677,10 +695,34 @@
     bindControls();
     syncSlidersFromFigure();
 
-    canvas.addEventListener('pointerdown', onPointerDown);
+    canvas.addEventListener('pointerdown', function (ev) {
+      state.ignoreMouse = true;
+      onPointerDown(ev);
+    });
     canvas.addEventListener('pointermove', onPointerMove);
-    canvas.addEventListener('pointerup', onPointerUp);
+    canvas.addEventListener('pointerup', function (ev) {
+      onPointerUp(ev);
+      setTimeout(function () { state.ignoreMouse = false; }, 0);
+    });
     canvas.addEventListener('pointercancel', onPointerUp);
+    canvas.addEventListener('mousedown', function (ev) {
+      if (state.ignoreMouse) {
+        return;
+      }
+      onPointerDown(ev);
+    });
+    canvas.addEventListener('mousemove', function (ev) {
+      if (state.ignoreMouse) {
+        return;
+      }
+      onPointerMove(ev);
+    });
+    canvas.addEventListener('mouseup', function (ev) {
+      if (state.ignoreMouse) {
+        return;
+      }
+      onPointerUp(ev);
+    });
     canvas.addEventListener('contextmenu', onContextMenu);
     canvas.addEventListener('wheel', onWheel, { passive: false });
     window.addEventListener('resize', render);
