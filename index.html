@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Figure Modelator</title>
+  <meta name="description" content="Click-to-sculpt 3D polygons in the browser with WebGL.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <h1>Figure Modelator</h1>
+          <p>WebGL polygon studio</p>
+        </div>
+      </div>
+      <div class="topbar-status">
+        <span class="pill" id="figure-pill">No figures</span>
+        <span class="pill pill-mute" id="vertex-pill">0 vertices</span>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <section class="viewport" aria-label="3D viewport">
+        <canvas id="webgl">Please use a browser that supports canvas and WebGL.</canvas>
+        <div class="hud">
+          <p><kbd>Click</kbd> add vertex · <kbd>Right-click</kbd> new figure</p>
+          <p><kbd>Alt-drag</kbd> orbit · <kbd>Scroll</kbd> zoom · <kbd>Ctrl</kbd>/<kbd>Shift</kbd> depth</p>
+        </div>
+        <div class="axis-legend" aria-hidden="true">
+          <span class="ax ax-x">X</span>
+          <span class="ax ax-y">Y</span>
+          <span class="ax ax-z">Z</span>
+        </div>
+      </section>
+
+      <aside class="dock">
+        <section class="panel">
+          <h2>Rotation axis</h2>
+          <div class="segmented" role="radiogroup" aria-label="Rotation axis">
+            <label><input type="radio" name="axis" value="x" checked> X</label>
+            <label><input type="radio" name="axis" value="y"> Y</label>
+            <label><input type="radio" name="axis" value="z"> Z</label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Transform</h2>
+          <label class="control">
+            <span>Rotation <em id="rotation-value">0°</em></span>
+            <input type="range" id="rotation" min="-360" max="360" step="1" value="0">
+          </label>
+          <div class="range-limits">
+            <label>Min <input type="number" id="rotation-min" value="-360" step="10"></label>
+            <label>Max <input type="number" id="rotation-max" value="360" step="10"></label>
+          </div>
+          <label class="control">
+            <span>Scale <em id="scale-value">1.00</em></span>
+            <input type="range" id="scale" min="0.1" max="3" step="0.05" value="1">
+          </label>
+          <label class="control">
+            <span>Translate X <em id="tx-value">0.00</em></span>
+            <input type="range" id="tx" min="-2" max="2" step="0.05" value="0">
+          </label>
+          <label class="control">
+            <span>Translate Y <em id="ty-value">0.00</em></span>
+            <input type="range" id="ty" min="-2" max="2" step="0.05" value="0">
+          </label>
+          <label class="control">
+            <span>Translate Z <em id="tz-value">0.00</em></span>
+            <input type="range" id="tz" min="-2" max="2" step="0.05" value="0">
+          </label>
+        </section>
+
+        <section class="panel">
+          <h2>Color</h2>
+          <div class="color-row">
+            <input type="color" id="color-picker" value="#3bb8e0" aria-label="Figure color">
+            <div class="swatch" id="swatch"></div>
+          </div>
+          <label class="control">
+            <span>Red <em id="r-value">59</em></span>
+            <input type="range" id="red" class="slider-red" min="0" max="255" step="1" value="59">
+          </label>
+          <label class="control">
+            <span>Green <em id="g-value">184</em></span>
+            <input type="range" id="green" class="slider-green" min="0" max="255" step="1" value="184">
+          </label>
+          <label class="control">
+            <span>Blue <em id="b-value">224</em></span>
+            <input type="range" id="blue" class="slider-blue" min="0" max="255" step="1" value="224">
+          </label>
+          <label class="control">
+            <span>Vertex depth <em id="depth-value">0.00</em></span>
+            <input type="range" id="depth" min="-1.5" max="0.5" step="0.05" value="0">
+          </label>
+        </section>
+
+        <section class="panel">
+          <h2>Figures</h2>
+          <div class="figure-list" id="figure-list"></div>
+          <div class="actions">
+            <button type="button" id="prev-figure">Previous</button>
+            <button type="button" id="next-figure">Next</button>
+            <button type="button" id="new-figure" class="primary">New figure</button>
+            <button type="button" id="delete-figure" class="danger">Delete</button>
+            <button type="button" id="restart">Reset scene</button>
+          </div>
+        </section>
+
+        <section class="panel log-panel">
+          <h2>Activity</h2>
+          <div class="log" id="log" role="log" aria-live="polite"></div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script src="lib/webgl-utils.js"></script>
+  <script src="lib/webgl-debug.js"></script>
+  <script src="lib/cuon-utils.js"></script>
+  <script src="lib/cuon-matrix.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
